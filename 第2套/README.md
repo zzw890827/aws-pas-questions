@@ -1,74 +1,106 @@
 # AWS MLS 1-65
 
-1. A global enterprise is running SAP ERP Central Component (SAP ECC) workloads on Oracle in an on-premises environment. The enterprise plans to migrate to SAP S/4HANA on AWS.The enterprise recently acquired two other companies. One of the acquired companies is running SAP ECC on Oracle as its ERP system. The other acquired company is running an ERP system that is not from SAP. The enterprise wants to consolidate the three ERP systems into one ERP system on SAP S/4HANA on AWS. Not all the data from the acquired companies needs to be migrated to the final ERP system. The enterprise needs to complete this migration with a solution that minimizes cost and maximizes operational efficiency. Which solution will meet these requirements?
-   - [ ] A. Perform a lift-and-shift migration of all the systems to AWS. Migrate the ERP system that is not from SAP to SAP ECC. Convert all three systems to SAP S/4HANA by using SAP Software Update Manager (SUM) Database Migration Option (DMO). Consolidate all three SAP S/4HANA systems into a final SAP S/4HANA system. Decommission the other systems.
-   - [ ] B. Perform a lift-and-shift migration of all the systems to AWS. Migrate the enterprise's initial system to SAP HANA, and then perform a conversion to SAP S/4HANA. Consolidate the two systems from the acquired companies with this SAP S/4HANA system by using the Selective Data Transition approach with SAP Data Management and Landscape Transformation (DMLT).
-   - [ ] C. Use SAP Software Update Manager (SUM) Database Migration Option (DMO) with System Move to re-architect the enterprise’s initial system to SAP S/4HANA and to change the platform to AWS. Consolidate the two systems from the acquired companies with this SAP S/4HANA system by using the Selective Data Transition approach with SAP Data Management and Landscape Transformation (DMLT).
-   - [ ] D. Use SAP Software Update Manager (SUM) Database Migration Option (DMO) with System Move to re-architect all the systems to SAP S/4HANA and to change the platform to AWS. Consolidate all three SAP S/4HANA systems into a final SAP S/4HANA system. Decommission the other systems..
+1. A company is migrating its SAP S/4HANA landscape from on premises to AWS. An SAP solutions architect is designing a backup solution for the SAP S/4HANA landscape on AWS. The backup solution will use AWS Backint Agent for SAP HANA (AWS Backint agent) to store backups in Amazon S3. The company's backup policy for source systems requires a retention period of 150 days for weekly full online backups. The backup policy requires a retention period of 30 days for daily transaction log backups. The company must keep the same backup policy on AWS while maximizing data resiliency. The company needs the ability to retrieve the backup data one or two times each year within 10 hours of the retrieval request. The SAP solutions architect must configure AWS Backint agent and S3 Lifecycle rules according to these parameters. Which solution will meet these requirements MOST cost-effectively?
+   - [ ] A. Configure the target S3 bucket to use S3 Glacier Deep Archive for the backup files. Create S3 Lifecycle rules on the S3 bucket to delete full online backup files that are older than 150 days and to delete log backup files that are older than 30 days.
+   - [ ] B. Configure the target S3 bucket to use S3 Standard storage for the backup files. Create an S3 Lifecycle rule on the S3 bucket to move all the backup files to S3 Glacier Instant Retrieval. Create additional S3 Lifecycle rules to delete full online backup files that are older than 150 days and to delete log backup files that are older than 30 days.
+   - [ ] C. Configure the target S3 bucket to use S3 One Zone-Infrequent Access (S3 One Zone-IA) for the backup files. Create S3 Lifecycle rules on the S3 bucket to move full online backup files that are older than 30 days to S3 Glacier Flexible Retrieval and to delete log backup files that are older than 30 days. Create an additional S3 Lifecycle rule to delete full online backup files that are older than 150 days.
+   - [ ] D. Configure the target S3 bucket to use S3 Standard-Infrequent Access (S3 Standard-IA) for the backup files. Create S3 Lifecycle rules on the S3 bucket to move full online backup files that are older than 30 days to S3 Glacier Flexible Retrieval and to delete log backup files that are older than 30 days. Create an additional S3 Lifecycle rule to delete full online backup files that are older than 150 days.
+
+   <details>
+      <summary>Answer</summary>
+
+      D.
+      - Data Retention: Full online backups should be retained for 150 days, and daily transaction log backups for 30 days.
+      - Data Retrieval: The ability to retrieve backup data within 10 hours.
+      - Here are the different S3 storage classes' considerations:
+        - S3 Glacier Deep Archive: This is the lowest cost storage class and supports long-term retention and digital preservation. Retrieval times can be up to 12 hours.
+        - S3 Glacier Instant Retrieval: As of my last update in September 2021, there's no "S3 Glacier Instant Retrieval" storage class in AWS. However, assuming that it provides quicker retrieval, we would need to consider the cost-effectiveness.
+        - S3 One Zone-Infrequent Access (One Zone-IA): This storage class stores data in a single availability zone and is designed for data that can be recreated if lost. It is less expensive than S3 Standard-IA.
+        - S3 Standard-Infrequent Access (Standard-IA): This is for data that is accessed less frequently, but requires rapid access when needed.
+      - Considering the above:
+        - A. Glacier Deep Archive is the most cost-effective storage, but the retrieval time can be up to 12 hours, which violates the 10-hour requirement.
+        - B. This might be a feasible option if "S3 Glacier Instant Retrieval" offers quick retrievals, but we need to consider the cost.
+        - C. One Zone-IA might be cost-effective, but it risks data durability as it stores data in a single AZ. If that AZ becomes unavailable, the data could be lost. The requirement is to maximize data resiliency, which One Zone-IA doesn't provide.
+        - D. Standard-IA provides good durability by storing data across multiple AZs. Transitioning data to S3 Glacier Flexible Retrieval (if it provides retrieval within 10 hours) after 30 days can be cost-effective.
+      - Based on the given information: The answer is D. Configure the target S3 bucket to use S3 Standard-Infrequent Access (S3 Standard-IA) for the backup files. Create S3 Lifecycle rules on the S3 bucket to move full online backup files that are older than 30 days to S3 Glacier Flexible Retrieval and to delete log backup files that are older than 30 days. Create an additional S3 Lifecycle rule to delete full online backup files that are older than 150 days.
+
+   </details>
+
+2. A global retail company is running its SAP S/4HANA workload on AWS. The company's business has grown in the past few years, and user activity has generated a significant amount or data in the SAP S/4HANA system.
+The company wants to expand into new geographies. Before the company finalizes the expansion plan, the company wants to perform analytics on the historical data from the past few years. The company also wants to generate sales forecasts for potential expansion locations.
+An SAP solutions architect must implement a solution to extract the data from SAP S/4HANA into Amazon S3. The solution also must perform the required analytics and forecasting tasks.
+Which solution will meet these requirements with the LEAST custom development effort?
+   - [ ] A. Use AWS AppSync to extract the data from SAP S/4HANA and to store the data in Amazon S3. Use AWS Glue to perform analytics. Use Amazon Forecast for sales forecasts.
+   - [ ] B. Use the SAP Landscape Transformation (LT) Replication Server SDK to extract the data, to integrate the data with SAP Data Services, and to store the data in Amazon S3. Use Amazon Athena to perform analytics. Use Amazon Forecast for sales forecasts.
+   - [ ] C. Use Amazon AppFlow to extract the data from SAP S/4HANA and to store the data in Amazon S3. Use Amazon QuickSight to perform analytics. Use Amazon Forecast for sales forecasts.
+   - [ ] D. Integrate AWS Glue and AWS Lambda with the SAP Operational Data Provisioning (ODP) Framework to extract the data from SAP S/4HANA and to store the data in Amazon S3. Use Amazon QuickSight to perform analytics. Use Amazon Forecast for sales forecasts.
 
    <details>
       <summary>Answer</summary>
 
       C.
+      - Option A is not suitable as AWS AppSync is not intended for this kind of workload.
+      - Option B is a valid choice but might involve a significant setup for both SAP LT Replication and SAP Data Services.
+      - Option C uses AWS-native services that are designed to integrate with each other and with SaaS applications, providing a streamlined solution.
+      - Option D might require more custom development and integration effort.
 
    </details>
 
-2. A global retail company is running its SAP landscape on AWS. Recently, the company made changes to its SAP Web Dispatcher architecture. The company added an additional SAP Web Dispatcher for high availability with an Application Load Balancer (ALB) to balance the load between the two SAP Web Dispatchers.When users try to access SAP through the ALB, the system is reachable. However, the SAP backend system is showing an error message. An investigation reveals that the issue is related to SAP session handling and distribution of requests. The company confirmed that the system was working as expected with one SAP Web Dispatcher. The company replicated the configuration of that SAP Web Dispatcher to the new SAP Web Dispatcher.How can the company resolve the error?
-   - [ ] A. Maintain persistence by using session cookies. Enable session stickiness (session affinity) on the SAP Web Dispatchers by setting the wdisp/HTTP/esid_support parameter to True.
-   - [ ] B. Maintain persistence by using session cookies. Enable session stickiness (session affinity) on the ALB.
-   - [ ] C. Turn on host-based routing on the ALB to route traffic between the SAP Web Dispatchers.
-   - [ ] D. Turn on URL-based routing on the ALB to route traffic to the application based on URL.
+3. A company's SAP solutions architect needs to design an architecture to deploy a highly available SAP S/4HANA application on AWS. The company requires the SAP NetWeaver ASAP ASCS components and the SAP HANA database components or the application to be highly available. The company will operate the SAP NetWeaver ASCS, SAP NetWeaver PAS, and SAP HANA database components on separate Amazon EC2 instances. Each EC2 instance will run the Red Hat Enterprise Linux operating system. The company's AWS account has a VPC with a CIDR block that uses the 10.0.0.0/24 address block. The VPC contains two subnets. Each subnet is assigned to a different Availability Zone. The company has no other VPCs in this account, and the company has no other AWS accounts. Which set of overlay IP addresses can the SAP solutions architect use to provide the required highly available architecture?
+   - [ ] A. Two overlay IP addresses: 10.0.0.50 for SAP ASCS and 10.0.0.54 for SAP HANA
+   - [ ] B. Two overlay IP addresses: 192.168.0.50 for SAP ASCS and 192.168.0.54 for SAP HANA
+   - [ ] C. Three overlay IP addresses: 10.0.0.50 for SAP ASCS, 10.0.0.52 for SAP ERS, and 10.0.0.54 for SAP HANA
+   - [ ] D. Three overlay IP addresses: 192.168.0.50 for SAP ASCS, 192.168.0.52 for SAP ERS, and 192.168.0.54 for SAP HANA
+
+   <details>
+      <summary>Answer</summary>
+
+      C.
+      The key consideration here is to ensure high availability for the SAP NetWeaver ASCS (Application Server Central Services) and SAP HANA. For high availability setups in SAP, the usage of Enqueue Replication Servers (ERS) is common. ERS is used to replicate the lock table, which is managed by the ASCS instance.
+
+      The SAP documentation typically references using three IP addresses in high-availability clusters:
+      - For the ASCS instance.
+      - For the ERS instance.
+      - For the database (SAP HANA in this context).
+
+      Given the above, we require three overlay IP addresses. Regarding the IP address ranges, the overlay IPs should fall within the VPC's CIDR range. The given VPC CIDR block is 10.0.0.0/24, which means any IP within the 10.0.0.1 to 10.0.0.254 range can be used (excluding the network and broadcast addresses). Thus, the correct choice is: C. Three overlay IP addresses: 10.0.0.50 for SAP ASCS, 10.0.0.52 for SAP ERS, and 10.0.0.54 for SAP HANA.
+
+   </details>
+
+4. A company has grown rapidly in a short period of time. This growth has led to an increase in the volume of data, the performance requirements for storage, and the memory and vCPU requirements for the company's SAP HANA database that runs on AWS. The SAP HANA database is a scale-up installation. Because of the increased requirements, the company plans to change the Amazon EC2 instance type to a virtual EC2 High Memory instance and plans to change the Amazon Elastic Block Store (Amazon EBS) volume type to a higher performance volume type for the SAP HANA database. The EC2 instance is a current-generation instance, both before and after the change. Additionally, the EC2 instance and the EBS volume meet all the prerequisites for instance type change and EBS volume type change. An SAP basis administrator must advise the company about whether these changes will require downtime for the SAP system. Which guidance should the SAP basis administrator provide to the company?
+   - [ ] A. The change in EC2 instance type does not require SAP system downtime, but the change in EBS volume type requires SAP system downtime.
+   - [ ] B. The change in EC2 instance type requires SAP system downtime, but the change in EBS volume type does not require SAP system downtime.
+   - [ ] C. Neither the change in EC2 instance type nor the change in EBS volume type requires SAP system downtime.
+   - [ ] D. Both the change in EC2 instance type and the change in EBS volume type require SAP system downtime.
 
    <details>
       <summary>Answer</summary>
 
       B.
+      - Changing an Amazon EC2 instance type: When you change the EC2 instance type (especially for a memory-intensive application like SAP HANA), you need to stop the instance, change the instance type, and then start the instance. The process of stopping and starting the instance will interrupt the availability of SAP HANA, which means there will be downtime for the SAP system.
+      - Changing the Amazon EBS volume type: Changing the type of an EBS volume typically involves modifying the volume type, which can often be done without detaching the volume or restarting the instance that it's attached to. Therefore, many EBS volume modifications do not require downtime.
 
    </details>
 
-3. A company hosts its SAP NetWeaver workload on SAP HANA in the AWS Cloud. The SAP NetWeaver application is protected by a cluster solution that uses Red Hat Enterprise Linux. High Availability Add-On. The cluster solution uses an overlay IP address to ensure that the high availability cluster is still accessible during failover scenarios.An SAP solutions architect needs to facilitate the network connection to this overlay IP address from multiple locations. These locations include more than 25 VPCs, other AWS Regions, and the on-premises environment. The company already has set up an AWS Direct Connect connection between the on-premises environment and AWS. What should the SAP solutions architect do to meet these requirements in the MOST scalable manner?
-   - [ ] A. Use VPC peering between the VPCs to route traffic between them.
-   - [ ] B. Use AWS Transit Gateway to connect the VPCs and on-premises networks together.
-   - [ ] C. Use a Network Load Balancer to route connections to various targets within VPCs.
-   - [ ] D. Deploy a Direct Connect gateway to connect the Direct Connect connection over a private VIF to one or more VPCs in any accounts.
-   <details>
-      <summary>Answer</summary>
-
-      B.
-
-   </details>
-
-4. A company is implementing SAP HANA on AWS. According to the company’s security policy, SAP backups must be encrypted. Only authorized team members can have the ability to decrypt the SAP backups. What is the MOST operationally efficient solution that meets these requirements?
-   - [ ] A. Configure AWS Backint Agent for SAP HANA to create SAP backups in an Amazon S3 bucket. After a backup is created, encrypt the backup by using client-side encryption. Share the encryption key with authorized team members only.
-   - [ ] B. Configure AWS Backint Agent for SAP HANA to use AWS Key Management Service (AWS KMS) for SAP backups. Create a key policy to grant decryption permission to authorized team members only.
-   - [ ] C. Configure AWS Storage Gateway to transfer SAP backups from a file system to an Amazon S3 bucket. Use an S3 bucket policy to grant decryption permission to authorized team members only.
-   - [ ] D. Configure AWS Backint Agent for SAP HANA to use AWS Key Management Service (AWS KMS) for SAP backups. Grant object ACL decryption permission to authorized team members only.
-
-   <details>
-      <summary>Answer</summary>
-
-      B.
-
-   </details>
-
-5. A data analysis company has two SAP landscapes that consist of sandbox, development, QA, pre-production, and production servers. One landscape is on Windows, and the other landscape is on Red Hat Enterprise Linux. The servers reside in a room in a building that other tenants share. An SAP solutions architect proposes to migrate the SAP applications to AWS. The SAP solutions architect wants to move the production backups to AWS and wants to make the backups highly available to restore in case of unavailability of an on-premises server. Which solution will meet these requirements MOST cost-effectively?
-   - [ ] A. Take a backup of the production servers. Implement an AWS Storage Gateway Volume Gateway. Create file shares by using the Storage Gateway Volume Gateway. Copy the backup files to the file shares through NFS and SMB.
-   - [ ] B. Take a backup of the production servers. Send those backups to tape drives. Implement an AWS Storage Gateway Tape Gateway. Send the backups to Amazon S3 Standard-Infrequent Access (S3 Standard-IA) through the S3 console. Move the backups immediately to S3 Glacier Deep Archive.
-   - [ ] C. Implement a third-party tool to take images of the SAP application servers and database server. Take regular snapshots at 1-hour intervals. Send the snapshots to Amazon S3 Glacier directly through the S3 Glacier console. Store the same images in different S3 buckets in different AWS Regions.
-   - [ ] D. Take a backup of the production servers. Implement an Amazon S3 File Gateway. Create file shares by using the S3 File Gateway. Copy the backup files to the file shares through NFS and SMB. Map backup files directly to Amazon S3. Configure an S3 Lifecycle policy to send the backup files to S3 Glacier based on the company’s data retention policy.
+5. A company is running its on-premises SAP ERP Central Component (SAP ECC) system on an Oracle database on Oracle Enterprise Linux. The database is 1 TB in size and uses 27,000 IOPS for its peak performance Multiple SSD volumes are striped to store Oracle data files in separate sapdata directories to gain the required IOPS. The company is planning to move this workload to AWS. The company chooses high I/O bandwidth instances with a Nitro hypervisor to host the target database instance. Downtime is not a constraint for the migration. The company needs an Amazon Elastic Block Store (Amazon EBS) storage layout that optimizes cost for the migration. How should the company reorganize the Oracle data files to meet these requirements?
+   - [ ] A. Reorganize the Oracle data files into one 9 TB General Purpose SSD (gp2) EBS volume.
+   - [ ] B. Reorganize the Oracle data files into a striped volume of three 3 TB General Purpose SSD (gp2) EBS volumes.
+   - [ ] C. Reorganize the Oracle data files into one 1 TB General Purpose SSD (gp3) EBS volume with 27,000 provisioned IOPS.
+   - [ ] D. Reorganize the Oracle data files into ten 100 GB General Purpose SSD (gp3) EBS volumes.
 
    <details>
       <summary>Answer</summary>
 
       D.
+      Ten 100 GB gp3 EBS volumes: Each volume would provide a baseline performance of 3,000 IOPS and cost optimized.
 
    </details>
 
-6. A company’s SAP basis team is responsible for database backups in Amazon S3. The company frequently needs to restore the last 3 months of backups into the pre-production SAP system to perform tests and analyze performance. Previously, an employee accidentally deleted backup files from the S3 bucket. The SAP basis team wants to prevent accidental deletion of backup files in the future. Which solution will meet these requirements?
-   - [ ] A. Create a new resource-based policy that prevents deletion of the S3 bucket.
-   - [ ] B. Enable versioning and multi-factor authentication (MFA) on the S3 bucket.
-   - [ ] C. Create signed cookies for the backup files in the S3 bucket. Provide the signed cookies to authorized users only.
-   - [ ] D. Apply an S3 Lifecycle policy to move the backup files immediately to S3 Glacier.
+6. An SAP engineer is designing an SAP S/4HANA high availability architecture on Linux Amazon EC2 instances in two Availability Zones. The SAP engineer needs to create a solution to achieve high availability and consistency for /usr/sap/trans end /usr/sap/ file systems. Which solution will meet these requirements with the MOST reliability?
+   - [ ] A. Set up an NFS server on one of the EC2 instances.
+   - [ ] B. Use Amazon Elastic File System (Amazon EFS).
+   - [ ] C. Use the EC2 local instance store.
+   - [ ] D. Use Amazon Elastic Block Store (Amazon EBS) Multi-Attach.
 
     <details>
       <summary>Answer</summary>
@@ -77,51 +109,73 @@
 
    </details>
 
-7. A company wants to run SAP HANA on AWS in the eu-central-1 Region. The company must make the SAP HANA system highly available by using SAP HANA system replication. In addition, the company must create a disaster recovery (DR) solution that uses SAP HANA system replication in the eu-west-1 Region. As prerequisites, the company has confirmed that Inter-AZ latency is less than 1 ms and that Inter-Region latency is greater than 1 ms. Which solutions will meet these requirements? (Choose two.)
-   - [ ] A. Install the tier 1 primary system and the tier 2 secondary system in eu-central-1. Configure the tier 1 system in Availability Zone 1. Configure the tier 2 system in Availability Zone 2. Configure SAP HANA system replication between tier 1 and tier 2 by using ASYNC replication mode. Install the DR tier 3 secondary system in eu-west-1 by using SYNC replication mode.
-   - [ ] B. Install the tier 1 primary system and the tier 2 secondary system in eu-central-1. Configure the tier 1 system in Availability Zone 1. Configure the tier 2 system in Availability Zone 2. Configure SAP HANA system replication between tier 1 and tier 2 by using SYNC replication mode. Install the DR tier 3 secondary system in eu-west-1 by using ASYNC replication mode.
-   - [ ] C. Install the tier 1 primary system and the tier 2 secondary system in eu-central-1. Configure the tier 1 system in Availability Zone 1. Configure the tier 2 system in Availability Zone 2. Configure SAP HANA system replication between tier 1 and tier 2 by using SYNC replication mode. Install the DR tier 3 secondary system in eu-west-1. Store daily backups from tier 1 in an Amazon S3 bucket in eu-central-1. Use S3 Cross-Region Replication to copy the daily backups to eu-west-1, where they can be restored if needed.
-   - [ ] D. Install the tier 1 primary system in eu-central-1. Install the tier 2 secondary system and the DR tier 3 secondary system in eu-west-1. Configure the tier 2 system in Availability Zone 1. Configure the tier 3 system in Availability Zone 2. Configure SAP HANA system replication between all tiers by using ASYNC replication mode.
-   - [ ] E. Install the tier 1 primary system and the tier 2 secondary system in eu-central-1. Configure the tier 1 system in Availability Zone 1. Configure the tier 2 system in Availability Zone 2. Configure SAP HANA system replication between tier 1 and tier 2 by using SYNCMEM replication mode. Install the DR tier 3 secondary system in eu-west-1 by using ASYNC replication mode.
+7. A company migrated its SAP environment to AWS 6 months ago. The landscape consists of a few thousand Amazon EC2 instances for production, development, quality, and sandbox environments. The company wants to minimize the operational cost of the landscape without affecting system performance and availability. Which solutions will meet these requirements? (Choose two.)
+   - [ ] A. Scale down the EC2 instance size for non-production environments.
+   - [ ] B. Create an AWS Systems Manager document to automatically stop and start the SAP systems. Use Amazon CloudWatch to automate the scheduling of this task.
+   - [ ] C. Review the billing data for the EC2 instances. Analyze the workload, and choose an EC2 Instance Savings Plan.
+   - [ ] D. Create an AWS Systems Manager document to automatically stop and start the SAP systems and EC2 instances for non-production environments outside business hours. Use Amazon EventBridge to automate the scheduling of this task.
+   - [ ] E. Create an AWS Systems Manager document to automatically stop and start the SAP systems and EC2 instances. Maintain the schedule in the Systems Manager document to automate this task.
 
     <details>
       <summary>Answer</summary>
 
-      BE.
+      AD.
+      - Scaling down is one of the most direct ways to save costs.
+      - Stopping instances outside of business hours can also lead to significant savings, especially for non-production environments.
 
    </details>
 
-8. A company is running an SAP ERP Central Component (SAP ECC) system on an SAP HANA database that is 10 TB in size. The company is receiving notifications about long-running database backups every day. The company uses AWS Backint Agent for SAP HANA (AWS Backint agent) on an Amazon EC2 instance to back up the database. An SAP NetWeaver administrator needs to troubleshoot the problem and propose a solution. Which solution will help resolve this problem?
-   - [ ] A. Ensure that AWS Backint agent is configured to send the backups to an Amazon S3 bucket over the internet. Ensure that the EC2 instance is configured to access the internet through a NAT gateway.
-   - [ ] B. Check the UploadChannelSize parameter for AWS Backint agent. Increase this value in the aws-backint-agent-config.yaml configuration file based on the EC2 instance type and storage configurations.
-   - [ ] C. Check the MaximumConcurrentFilesForRestore parameter for AWS Backint agent. Increase the parameter from 5 to 10 by using the aws-backint-agent-config.yaml configuration file.
-   - [ ] D. Ensure that the backups are compressed. If necessary, configure AWS Backint agent to compress the backups and send them to an Amazon S3 bucket.
-
-   <details>
-      <summary>Answer</summary>
-
-      B.
-
-   </details>
-
-9. A company wants to migrate its SAP workloads to AWS from another cloud provider. The company’s landscape consists of SAP S/4HANA, SAP BW/4HANA, SAP Solution Manager, and SAP Web Dispatcher. SAP Solution Manager is running on SAP HANA. The company wants to change the operating system from SUSE Linux Enterprise Server to Red Hat Enterprise Linux as a part of this migration. The company needs a solution that results in the least possible downtime for the SAP S/4HANA and SAP BW/4HANA systems. Which migration solution will meet these requirements?
-   - [ ] A. Use SAP Software Provisioning Manager to perform a system export/import for SAP S/4HANA, SAP BW/4HANA, SAP Solution Manager, and SAP Web Dispatcher.
-   - [ ] B. Use backup and restore for SAP S/4HANA, SAP BW/4HANA, and SAP Solution Manager. Reinstall SAP Web Dispatcher on AWS with the necessary configuration.
-   - [ ] C. Use backup and restore for SAP S/4HANA and SAP BW/4HANA. Use SAP Software Provisioning Manager to perform a system export/import for SAP Solution Manager. Reinstall SAP Web Dispatcher on AWS with the necessary configuration.
-   - [ ] D. Use SAP HANA system replication to replicate the data between the source system and the target AWS system for SAP S/4HANA and SAP BW/4HANA. Use SAP Software Provisioning Manager to perform a system export/import for SAP Solution Manager. Reinstall SAP Web Dispatcher on AWS with the necessary configuration.
+8. An SAP solutions architect needs to design a highly available solution to support a 12 TB SAP HANA system on AWS. The solution will be deployed in a single AWS Region. Which solution will meet these requirements MOST cost-effectively?
+   - [ ] A. Use an SAP certified high availability cluster solution and SAP HANA backup and restore.
+   - [ ] B. Use an SAP certified high availability cluster solution and SAP HANA system replication with data preload.
+   - [ ] C. Use an SAP certified high availability cluster solution and multi-tiered SAP HANA system replication.
+   - [ ] D. Use an SAP certified high availability cluster solution and storage replication with AWS Elastic Disaster Recovery.
 
    <details>
       <summary>Answer</summary>
 
       D.
+      <https://docs.aws.amazon.com/wellarchitected/latest/sap-lens/best-practice-17-2.html>
 
    </details>
 
-10. A company is running an SAP on Oracle system on IBM Power architecture in an on-premises data center. The company wants to migrate the SAP system to AWS. The Oracle database is 15 TB in size. The company has set up a 100 Gbps AWS Direct Connect connection to AWS from the on-premises data center. Which solution should the company use to migrate the SAP system MOST quickly?
-    - [ ] A. Before the migration window, build a new installation of the SAP system on AWS by using SAP Software Provisioning Manager. During the migration window, export a copy of the SAP system and database by using the heterogeneous system copy process and R3load. Copy the output of the SAP system files to AWS through the Direct Connect connection. Import the SAP system to the new SAP installation on AWS. Switch over to the SAP system on AWS.
-    - [ ] B. Before the migration window, build a new installation of the SAP system on AWS by using SAP Software Provisioning Manager. Back up the Oracle database by using native Oracle tools. Copy the backup of the Oracle database to AWS through the Direct Connect connection. Import the Oracle database to the SAP system on AWS. Configure Oracle Data Guard to begin replicating on-premises database log changes from the SAP system to the new AWS system. During the migration window, use Oracle to replicate any remaining changes to the Oracle database hosted on AWS. Switch over to the SAP system on AWS.
-    - [ ] C. Before the migration window, build a new installation of the SAP system on AWS by using SAP Software Provisioning Manager. Create a staging Oracle database on premises to perform Cross Platform Transportable Tablespace (XTTS) conversion on the Oracle database. Take a backup of the converted staging database. Copy the converted backup to AWS through the Direct Connect connection. Import the Oracle database backup to the SAP system on AWS. Take regularly scheduled incremental backups and XTTS conversions of the staging database. Transfer these backups and conversions to the AWS target database. During the migration window, perform a final incremental Oracle backup. Convert the final Oracle backup by using XTTS. Replay the logs in the target Oracle database hosted on AWS. Switch over to the SAP system on AWS.
-    - [ ] D. Before the migration window, launch an appropriately sized Amazon EC2 instance on AWS to receive the migrated SAP database. Create an AWS Server Migration Service (AWS SMS) job to take regular snapshots of the on-premises Oracle hosts. Use AWS SMS to copy the snapshot as an AMI to AWS through the Direct Connect connection. Create a new SAP on Oracle system by using the migrated AMI. During the migration window, take a final incremental SMS snapshot and copy the snapshot to AWS. Restart the SAP system by using the new up-to-date AMI. Switch over to the SAP system on AWS.
+9. A company's SAP solutions architect is configuring a network architecture for an SAP HANA multi-node environment. The company requires isolation of the logical network zones: client, internal, and storage. The database runs on X1 (memory optimized) Amazon EC2 instances and uses Amazon Elastic Block Store (Amazon EBS) volumes for persistent storage. Which combination of actions will provide the required isolation? (Choose three.)
+   - [ ] A. Attach an AWS Network Firewall policy for each zone to the subnet for the node cluster.
+   - [ ] B. Attach a secondary elastic network interface to each instance for the internal communications between nodes.
+   - [ ] C. Attach a secondary elastic network interface to each instance for the storage communications.
+   - [ ] D. Configure a security group with rules that allow only TCP connections within the security group on the ports that are assigned for the internal network connections. Associate the security group with the appropriate elastic network interface on each instance.
+   - [ ] E. Configure a security group with rules that allow only TCP connections with the external customer network on the ports that are assigned for the client connections. Associate the security group with the appropriate elastic network interface.
+   - [ ] F. Configure a security group with rules that allow Non-Volatile Memory Express (NVMe) connections within the subnet range. Associate the security group with the appropriate elastic network interface on each instance.
+
+   <details>
+      <summary>Answer</summary>
+
+      BCD.
+
+   </details>
+
+10. An SAP database analyst installs AWS Backint Agent for SAP HANA (AWS Backint agent) by using AWS Systems Manager. The SAP database analyst runs an initial test to perform a database backup for a 512 GB SAP HANA database. The database runs on an SAP certified Amazon EC2 instance type with General Purpose SSD (gp2) Amazon Elastic Block Store (Amazon EBS) volumes for all disk storage. The backup is running too slowly. Which actions should the SAP database analyst take to improve the performance of AWS Backint agent? (Choose two.)
+
+    - [ ] A. Set the parallel_data_backup_backint_channels parameter to a number greater than 1.
+    - [ ] B. Select a Provisioned IOPS SSD (io2) volume as the backup target for AWS Backint agent.
+    - [ ] C. Delete unnecessary older backup files from backups that SAP Backint agent performed.
+    - [ ] D. Change the existing gp2-based SAP HANA data volumes to the Provisioned IOPS SSD (io2) EBS volume type.
+    - [ ] E. Reinstall AWS Backint agent by using the AWS Backint installer rather than the Systems Manager document.
+
+    <details>
+      <summary>Answer</summary>
+
+      AD.
+      Increasing the value of the parallel_data_backup_backint_channels parameter allows the Backint agent to execute more than one backup process in parallel, improving the overall backup speed. Switching the EBS volume type from gp2 to io2 provides more consistent and faster I/O performance, which can also speed up backup processes.
+
+     </details>
+
+11. A company is planning to retire a data center where a few legacy SAP applications run. The applications are SAP R/3 4.6C with a Microsoft SQL Server 2005 database end are running on Windows Server 2008. The applications are outside the extended maintenance period. There is no SAP support for the applications. The company has no plans to upgrade the applications or move the applications to a different platform. The company does not have a policy to maintain installation media for any of the applications. The company wants to migrate the applications to AWS. How can the company migrate the applications to AWS?
+    - [ ] A. Use AWS Launch Wizard for SAP to launch the applications on AWS. Migrate the applications by using backup and restore.
+    - [ ] B. Perform an SAP system copy from the source to the target by using SAP Software Provisioning Manager.
+    - [ ] C. Use AWS Application Migration Service to migrate the applications.
+    - [ ] D. Manually install the applications on AWS. Perform a database synchronization from the source to the target.
+
     <details>
        <summary>Answer</summary>
 
@@ -129,52 +183,24 @@
 
     </details>
 
-11. An SAP solutions architect is designing an SAP HANA scale-out architecture for SAP Business Warehouse (SAP BW) on SAP HANA on AWS. The SAP solutions architect identifies the design as a three-node scale-out deployment of xte.32xiarge Amazon EC2 instances. The SAP solutions architect must ensure that the SAP HANA scale-out nodes can achieve the low-latency and high-throughput network performance that are necessary for node-to-node communication. Which combination of steps should the SAP solutions architect take to meet these requirements? (Choose two.)
-    - [ ] A. Create a cluster placement group. Launch the instances into the cluster placement group.
-    - [ ] B. Create a spread placement group. Launch the instances into the spread placement group.
-    - [ ] C. Create a partition placement group. Launch the instances into the partition placement group.
-    - [ ] D. Based on the operating system version, verify that enhanced networking is enabled on all the nodes.
-    - [ ] E. Switch to a different instance family that provides network throughput that is greater than 25 Gbps.
+12. A company is running its SAP S/4HANA production system on AWS. The system is 5 TB in size and has a high performance and IOPS demand for the SAP HANA data storage. The company is using Amazon Elastic Block Store (Amazon EBS) General Purpose SSD (gp2) storage with burstable IOPS to meet this demand. An SAP solutions architect needs to review the current storage layout and recommend a more cost-effective solution without compromising storage performance. What should the SAP solutions architect recommend to meet these requirements?
+    - [ ] A. Switch from burstable IOPS to allocated IOPS for the gp2 storage.
+    - [ ] B. Replace all the gp2 storage with Provisioned IOPS SSD (io2) storage.
+    - [ ] C. Replace all the gp2 storage with gp3 storage. Configure the required IOPS.
+    - [ ] D. Replace all the gp2 storage with gp3 storage at baseline IOPS.
 
     <details>
        <summary>Answer</summary>
 
-       AD.
+       C.
 
     </details>
 
-12. A company needs to migrate its critical SAP workloads from an on-premises data center to AWS. The company has a few source production databases that are 10 TB or more in size. The company wants to minimize the downtime for this migration. As part of the proof of concept, the company used a low-speed, high-latency connection between its data center and AWS. During the actual migration, the company wants to maintain a consistent connection that delivers high bandwidth and low latency. The company also wants to add a layer of connectivity resiliency. The backup connectivity does not need to be as fast as the primary connectivity.An SAP solutions architect needs to determine the optimal network configuration for data transfer. The solution must transfer the data with minimum latency.Which configuration will meet these requirements?
-    - [ ] A. Set up one AWS Direct Connect connection for connectivity between the on-premises data center and AWS. Add an AWS Site-to-Site VPN connection as a backup to the Direct Connect connection.
-    - [ ] B. Set up an AWS Direct Connect gateway with multiple Direct Connect connections that use a link aggregation group (LAG) between the on-premises data center and AWS.
-    - [ ] C. Set up Amazon Elastic File System (Amazon EFS) file system storage between the on-premises data center and AWS. Configure a cron job to copy the data into this EFS mount. Access the data in the EFS file system from the target environment.
-    - [ ] D. Set up two redundant AWS Site-to-Site VPN connections for connectivity between the on-premises data center and AWS.
-
-    <details>
-       <summary>Answer</summary>
-
-       A.
-
-    </details>
-
-13. A company wants to migrate its SAP ERP landscape to AWS. The company will use a highly available distributed deployment for the new architecture. Clients will access SAP systems from a local data center through an AWS Site-to-Site VPN connection that is already in place. An SAP solutions architect needs to design the network access to the SAP production environment. Which configuration approaches will meet these requirements? (Choose two.)
-    - [ ] A. For the ASCS instance, configure an overlay IP address that is within the production VPC CIDR range. Create an AWS Transit Gateway. Attach the VPN to the transit gateway. Use the transit gateway to route the communications between the local data center and the production VPC. Create a static route on the production VPC to route traffic that is directed to the overlay IP address to the ASCS instance.
-    - [ ] B. For the ASCS instance, configure an overlay IP address that is outside the production VPC CIDR range. Create an AWS Transit Gateway. Attach the VPN to the transit gateway. Use the transit gateway to route the communications between the local data center and the production VPC. Create a static route on the production VPC to route traffic that is directed to the overlay IP address to the ASCS instance. Most Voted
-    - [ ] C. For the ASCS instance, configure an overlay IP address that is within the production VPC CIDR range. Create a target group that points to the overlay IP address. Create a Network Load Balancer, and register the target group. Create a static route on the production VPC to route traffic that is directed to the overlay IP address to the ASCS instance.
-    - [ ] D. For the ASCS instance, configure an overlay IP address that is outside the production VPC CIDR range. Create a target group that points to the overlay IP address. Create a Network Load Balancer, and register the target group. Create a static route on the production VPC to route traffic that is directed to the overlay IP address to the ASCS instance. Most Voted
-    - [ ] E. For the ASCS instance, configure an overlay IP address that is outside the production VPC CIDR range. Create a target group that points to the overlay IP address. Create an Application Load Balancer, and register the target group. Create a static route on the production VPC to route traffic that is directed to the overlay IP address to the ASCS instance.
-
-    <details>
-       <summary>Answer</summary>
-
-       BD.
-
-    </details>
-
-14. A company is running an SAP HANA database on AWS. The company is running AWS Backint Agent for SAP HANA (AWS Backint agent) on an Amazon EC2 instance. AWS Backint agent is configured to back up to an Amazon S3 bucket. The backups are failing with an AccessDenied error in the AWS Backint agent log file. What should an SAP basis administrator do to resolve this error?
-    - [ ] A. Assign execute permissions at the operating system level for the AWS Backint agent binary and for AWS Backint agent.
-    - [ ] B. Assign an IAM role to an EC2 instance. Attach a policy to the IAM role to grant access to the target S3 bucket. Most Voted
-    - [ ] C. Assign the correct Region ID for the S3BucketAwsRegion parameter in AWS Backint agent for the SAP HANA configuration file.
-    - [ ] D. Assign the value for the EnableTagging parameter in AWS Backint agent for the SAP HANA configuration file.
+13. A company uses SAP S/4HANA as its ERP solution. The company is using AWS Backint Agent for SAP HANA (AWS Backint agent) for backups. Although the configuration is correct for AWS Backint agent, the backups are falling with the following error.`NoCredentialProviders: no valid providers in chain.` What could be the reason for this error?
+    - [ ] A. AWS Systems Manager Agent is not installed on the Amazon EC2 instance.
+    - [ ] B. No IAM role is attached to the Amazon EC2 instance.
+    - [ ] C. AWS Backint agent binaries are owned by a non-root user.
+    - [ ] D. AWS Backint agent is connecting to Amazon S3 with VPC endpoints.
 
     <details>
        <summary>Answer</summary>
@@ -183,28 +209,47 @@
 
     </details>
 
-15. A company is starting a new project to implement an SAP landscape with multiple accounts that belong to multiple teams in the us-east-2 Region. These teams include procurement, finance, sales, and human resources. An SAP solutions architect has started designing this new landscape and the AWS account structures. The company wants to use automation as much as possible. The company also wants to secure the environment, implement federated access to accounts, centralize logging, and establish cross-account security audits. In addition, the company’s management team needs to receive a top-level summary of policies that are applied to the AWS accounts. What should the SAP solutions architect do to meet these requirements?
-    - [ ] A. Use AWS CloudFormation StackSets to apply SCPs to multiple accounts in multiple Regions. Use an Amazon CloudWatch dashboard to check the applied policies in the accounts.
-    - [ ] B. Use an AWS Elastic Beanstalk blue/green deployment to create IAM policies and apply them to multiple accounts together. Use an Amazon CloudWatch dashboard to check the applied policies in the accounts.
-    - [ ] C. Implement guardrails by using AWS CodeDeploy and AWS CodePipeline to deploy SCPs into each account. Use the CodePipeline deployment dashboard to check the applied policies in the accounts.
-    - [ ] D. Apply SCPs through AWS Control Tower. Use the AWS Control Tower integrated dashboard to check the applied policies in the accounts.
+14. A company needs to migrate its SAP HANA landscape from an on-premises data center to AWS. The company's existing SAP HANA database instance is oversized. The company must resize the database instance as part of the migration. Which combination of steps should the company take to ensure that the target Amazon EC2 instance is sized optimally for the SAP HANA database instance? (Choose two.)
+    - [ ] A. Determine the peak memory utilization of the existing on-premises SAP HANA system.
+    - [ ] B. Determine the average memory utilization of the existing on-premises SAP HANA system.
+    - [ ] C. For the target system, select any SAP certified EC2 instance that provides more memory than the current average memory utilization.
+    - [ ] D. For the target system, select the smallest SAP certified EC2 instance that provides more memory than the current peak memory utilization.
+    - [ ] E. For the target system, select any current-generation EC2 memory optimized instance.
+
     <details>
        <summary>Answer</summary>
 
-       D.
+       AD.
+       When sizing an SAP HANA instance, it's crucial to take into account the peak memory utilization. Choosing an instance size that is based on the average memory utilization may result in performance issues during periods of peak demand. Therefore, it's important to choose an instance that can handle the highest memory demand anticipated. It's also more cost-effective to choose the smallest instance that meets these requirements.
 
     </details>
 
-16. A company is running its SAP workloads on premises and needs to migrate the workloads to AWS. All the workloads are running on SUSE Linux Enterprise Server and Oracle Database. The company’s landscape consists of SAP ERP Central Component (SAP ECC), SAP Business Warehouse (SAP BW), and SAP NetWeaver systems. The company has a dedicated AWS Direct Connect connection between its on-premises environment and AWS. The company needs to migrate the systems to AWS with the least possible downtime. Which migration solution will meet these requirements?
-    - [ ] A. Use SAP Software Provisioning Manager to perform an export of the systems. Copy the export to Amazon S3. Use SAP Software Provisioning Manager to perform an import of the systems to SUSE Linux Enterprise Server and Oracle Database on AWS.
-    - [ ] B. Use SAP Software Provisioning Manager to perform parallel export/import of the systems to migrate the systems to SUSE Linux Enterprise Server and Oracle Database on AWS.
-    - [ ] C. Use SAP Software Provisioning Manager to perform parallel export/import of the systems to migrate the systems to Oracle Enterprise Linux and Oracle Database on AWS.
-    - [ ] D. Use SAP Software Provisioning Manager to perform an export of the systems. Copy the export to Amazon S3. Use SAP Software Provisioning Manager to perform an import of the systems to Oracle Enterprise Linux and Oracle Database on AWS.
+15. A company plans to migrate a critical SAP S/4HANA workload from on-premises hardware to AWS. An SAP solutions architect needs to develop a solution to effectively monitor the SAP landscape on AWS for this workload. The solution must capture resource utilization and must follow a serverless approach to monitor the SAP environment. The solution also must track all the API calls that are made within the company's AWS account. Which combination of steps should the SAP solutions architect take to meet these requirements? (Choose two.)
+    - [ ] A. Configure Amazon CloudWatch detailed monitoring for the AWS resources in the SAP landscape. Use AWS Lambda, and create the Lambda layer "sapjco" for the SAP Java Connector. Deploy the solution with AWS Serverless Application Repository for sap-monitor.
+    - [ ] B. Set up a Multi-AZ deployment of SAP on AWS. Use Amazon EC2 Auto Scaling to add or remove EC2 instances automatically based on the CPU utilization of the SAP instance.
+    - [ ] C. Use AWS CloudTrail to log and retain account activity related to actions across the SAP on AWS infrastructure.
+    - [ ] D. Use the AWS Personal Health Dashboard to get a personalized view of performance and availability of the underlying AWS resources.
+    - [ ] E. Use AWS Trusted Advisor to optimize the AWS infrastructure and to improve security and performance.
+    <details>
+       <summary>Answer</summary>
+
+       AC.
+       - For monitoring the SAP landscape using a serverless approach: Option A is appropriate.
+       - For tracking all the API calls that are made within the company's AWS account: Option C is the best choice.
+
+    </details>
+
+16. A company is planning to deploy SAP HANA on AWS. The block storage that hosts the SAP HANA data volume must have at least 64,000 IOPS per volume and must have a maximum throughput of at least 500 MiB/s per volume. Which Amazon Elastic Block Store (Amazon EBS) volume meets these requirements?
+    - [ ] A. General Purpose SSD (gp2) EBS volume
+    - [ ] B. General Purpose SSD (gp3) EBS volume
+    - [ ] C. Provisioned IOPS SSD (io2) EBS volume
+    - [ ] D. Throughput Optimized HDD (st1) EBS volume
 
     <details>
        <summary>Answer</summary>
 
-       C. Because Oracle DB can not run on SUSE Linux Enterprise Server on AWS. It can only run on Oracle Enterprise Linux on AWS.
+       C.
+       The Provisioned IOPS SSD (io2) EBS volume allows you to provision up to 64,000 IOPS per volume, which is suitable for the IOPS requirement mentioned in the question. Furthermore, io2 volumes offer a maximum throughput of 1,000 MiB/s per volume, which also meets the requirement for a maximum throughput of at least 500 MiB/s per volume.
 
     </details>
 
