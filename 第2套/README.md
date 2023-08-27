@@ -760,3 +760,30 @@ Which solution will meet these requirements with the LEAST custom development ef
        Considering the minimal changes requirement and the given options, the most straightforward option would be to perform a heterogeneous migration and use Linux-based instances on AWS, as Linux has robust support for SAP ECC and Oracle.
 
     </details>
+
+53. A company is migrating its SAP workloads to AWS. The company’s IT team installs a highly available SAP S/4HANA system that uses the SAP HANA system replication cluster package on SUSE Linux Enterprise Server. The IT team deploys the system by using cluster nodes in different Availability Zones within the same AWS Region. After the initial launch of the SAP application, the application is accessible. However, after failover, the IT team cannot access the application even though the system is up and running on the secondary node. After investigation, an SAP solutions architect discovers that the virtual IP address has not been used correctly. Which combination of steps should the SAP solutions architect take to resolve this problem? (Choose two.)
+    - [ ] A. Use an overlay IP address as a secondary IP address with the primary node of the cluster.
+    - [ ] B. Choose an overlay IP address within the VPC CIDR block that corresponds with the secondary node of the cluster.
+    - [ ] C. Use an overlay IP address as a virtual IP address.
+    - [ ] D. Choose an overlay IP address within the VPC CIDR block that corresponds with the primary node of the cluster.
+    - [ ] E. Choose an overlay IP address outside the VPC CIDR block that hosts the application and the database.
+
+    <details>
+       <summary>Answer</summary>
+
+       CE.
+
+    </details>
+
+54. A company needs to implement high availability for its SAP S/4HANA system on AWS. The company will use a SUSE Linux Enterprise Server clustering solution in private subnets across two Availability Zones. An SAP solutions architect must ensure that the solution can route traffic to the active SAP instance in this clustered configuration. What should the SAP solutions architect do to meet these requirements?
+    - [ ] A. Implement the SAP cluster solution by using a secondary private IP address. Reassign the secondary private IP address from one network interface to another network interface in the event of any failure that affects the primary instance.
+    - [ ] B. Implement the SAP cluster solution by using an Elastic IP address. Mask the failure of an instance or software by rapidly remapping the address to another instance in the account.
+    - [ ] C. Implement the SAP cluster solution by using a public IP address. Use this public IP address for communication between the instances and the internet.
+    - [ ] D. Implement the SAP cluster solution by using an overlay IP address that is outside the CIDR block of the VPC. Use overlay IP address routing to dynamically update the route table to point to the active node and provide external access by using a Network Load Balancer or AWS Transit Gateway.
+
+    <details>
+       <summary>Answer</summary>
+
+       D.
+
+    </details>
