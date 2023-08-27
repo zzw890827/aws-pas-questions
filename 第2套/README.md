@@ -376,10 +376,10 @@ Which solution will meet these requirements with the LEAST custom development ef
     </details>
 
 26. A company recently migrated its SAP workload to AWS. The company's SAP engineer implements SAProuter on an Amazon EC2 instance that runs SUSE Linux Enterprise Server. The EC2 instance is in a public subnet and is an On-Demand Instance. The SAP engineer performs all the necessary configurations for SAProuter, security groups, and route tables. The SAProuter system needs to be online and available only when SAP Support is needed. The SAP engineer performs an initial test to validate SAP Support connectivity with SAProuter. The test is successful, and the SAP engineer stops the EC2 instance. When an event occurs that causes the company to need SAP Support, the company starts the EC2 instance that hosts SAProuter. After the EC2 instance is running, the SAP Support team cannot establish connectivity with SAProuter. What should the SAP engineer do to permanently resolve this issue?
-    - [ ]A. Re-install SAProuter on an EC2 instance in a private subnet. Update the SAProuter configuration with the instance's private IP address. Deploy a managed NAT gateway for AWS. Route SAP connectivity through the NAT gateway.
-    - [ ]B. Allocate an Elastic IP address to the EC2 instance that hosts SAProuter. Update the SAP router configuration with the Elastic IP address.
-    - [ ]C. Modify the security group that is associated with the EC2 instance that hosts SAProuter to allow access to all ports from the 0.0.0.0/0 CIDR block.
-    - [ ]D. Update the SAProuter configuration with the private IP address of the EC2 instance that hosts SAProuter.
+    - [ ] A. Re-install SAProuter on an EC2 instance in a private subnet. Update the SAProuter configuration with the instance's private IP address. Deploy a managed NAT gateway for AWS. Route SAP connectivity through the NAT gateway.
+    - [ ] B. Allocate an Elastic IP address to the EC2 instance that hosts SAProuter. Update the SAP router configuration with the Elastic IP address.
+    - [ ] C. Modify the security group that is associated with the EC2 instance that hosts SAProuter to allow access to all ports from the 0.0.0.0/0 CIDR block.
+    - [ ] D. Update the SAProuter configuration with the private IP address of the EC2 instance that hosts SAProuter.
 
     <details>
        <summary>Answer</summary>
