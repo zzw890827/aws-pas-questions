@@ -676,7 +676,7 @@ Which solution will meet these requirements with the LEAST custom development ef
     <details>
        <summary>Answer</summary>
 
-       .
+       B.
        With this approach, if one AZ goes down, the Auto Scaling group will work to maintain the minimum capacity of 4 servers by launching instances in the available AZ. Therefore, even with the loss of an entire AZ, the SAP application would still have 4 servers running, maintaining 66.6% availability, which is above the required 60%.
 
     </details>

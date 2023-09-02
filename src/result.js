@@ -1,62 +1,65 @@
-option = {
-  title: {
-    left: 'center',
-    text: '测试1错题直方图',
-  },
-  dataset: [
-    {
-      dimensions: ['number', 'frequent'],
-      source: [
-        ['01', 1],
-        ['02', 1],
-        ['03', 1],
-        ['05', 1],
-        ['09', 1],
-        ['14', 1],
-        ['16', 1],
-        ['18', 1],
-        ['20', 1],
-        ['21', 1],
-        ['27', 1],
-        ['29', 1],
-        ['31', 1],
-        ['32', 1],
-        ['34', 1],
-        ['35', 1],
-        ['36', 1],
-        ['39', 1],
-        ['40', 1],
-        ['41', 1],
-        ['49', 1],
-        ['52', 1],
-        ['53', 1],
-      ],
+  option = {
+    title: {
+      left: 'center',
+      text: '测试2错题直方图',
     },
-    {
-      transform: {
-        type: 'sort',
-        config: { dimension: 'frequent', order: 'desc' },
+    dataset: [
+      {
+        dimensions: ['number', 'frequent'],
+        source: [
+          ['01', 1],
+          ['02', 1],
+          ['03', 1],
+          ['04', 1],
+          ['05', 1],
+          ['09', 1],
+          ['11', 1],
+          ['12', 1],
+          ['14', 2],
+          ['16', 2],
+          ['18', 2],
+          ['20', 1],
+          ['21', 1],
+          ['27', 1],
+          ['29', 2],
+          ['31', 2],
+          ['32', 2],
+          ['34', 1],
+          ['35', 1],
+          ['36', 1],
+          ['39', 1],
+          ['40', 2],
+          ['41', 1],
+          ['49', 1],
+          ['52', 1],
+          ['53', 2],
+        ],
       },
+      {
+        transform: {
+          type: 'sort',
+          config: { dimension: 'frequent', order: 'desc' },
+        },
+      },
+    ],
+    xAxis: {
+      type: 'category',
+      axisLabel: { interval: 0, rotate: 30 },
     },
-  ],
-  xAxis: {
-    type: 'category',
-    axisLabel: { interval: 0, rotate: 30 },
-  },
-  yAxis: {},
-  series: {
-    type: 'bar',
-    encode: { x: 'number', y: 'frequent' },
-    datasetIndex: 1,
-  },
-};
+    yAxis: {},
+    series: {
+      type: 'bar',
+      encode: { x: 'number', y: 'frequent' },
+      datasetIndex: 1,
+    },
+  };
 
 /////////////////////////////////////////////////////
 
 option = {
   title: {
     left: 'center',
-    text: '测试2错题直方图',
+    text: '测试1错题直方图',
   },
   dataset: [
     {
