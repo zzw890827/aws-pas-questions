@@ -10,6 +10,8 @@
       <summary>Answer</summary>
 
       C.
+      A and D are wrong as one of the system is non-sap and DMP can not be used.
+      B gives the expected end result but C is more cost effective and efficient approach.
 
    </details>
 
@@ -61,6 +63,10 @@
       <summary>Answer</summary>
 
       D.
+      - A. AWS Storage Gateway Volume Gateway: This would be effective for disaster recovery, but it might be more expensive due to the volume gateway costs and egress charges.
+      - B. AWS Storage Gateway Tape Gateway and S3 Standard-IA and S3 Glacier Deep Archive: Using tape backups can be quite cost-effective for long-term storage. However, the retrieval time from Glacier Deep Archive is long and might not meet the high-availability requirement. Moreover, tape drives have an upfront hardware cost.
+      - C. Third-party tool with regular snapshots to S3 Glacier: This could be costly due to the frequency of the snapshots (every 1-hour). Also, sending data directly to S3 Glacier means that in case you need to quickly restore the data, you might have to wait a longer time for retrieval.
+      - D. Amazon S3 File Gateway with Lifecycle Policies: This option allows for easy backup restoration and could be the most cost-effective. Data can be initially stored in S3 (highly available and quickly accessible) and can be moved to Glacier based on a retention policy. This meets the requirements of high availability for restoration as well as cost-effectiveness over the long term.
 
    </details>
 
@@ -88,6 +94,8 @@
       <summary>Answer</summary>
 
       BE.
+      - This option meets the need for high availability within the same region with SYNC replication and disaster recovery in another region with ASYNC replication.
+      - SYNCMEM is an advanced variation of SYNC replication and works well for high availability within the same region. Disaster recovery in another region is accomplished using ASYNC replication.
 
    </details>
 
@@ -114,6 +122,10 @@
       <summary>Answer</summary>
 
       D.
+      - **A. Use SAP Software Provisioning Manager for System Export/Import:** This approach involves significant downtime, as you need to export/import for all the systems. This would likely not meet the "least possible downtime" requirement.
+      - **B. Use Backup and Restore for all Systems:** This is generally a safe approach, but the restoration process can be time-consuming, especially for large data sets in SAP S/4HANA and SAP BW/4HANA, not to mention adjusting for the new operating system (from SUSE to Red Hat). It may not meet the "least possible downtime" requirement.
+      - **C. Mixed Approach with Backup/Restore and System Export/Import:** This approach has the downside of still requiring potentially significant downtime for SAP S/4HANA and SAP BW/4HANA during backup and restore.
+      - **D. Use SAP HANA System Replication and Software Provisioning Manager:** System replication for SAP HANA is specifically designed to minimize downtime. It replicates changes in real-time from the source system to the target system, allowing for a quicker cutover. Meanwhile, Software Provisioning Manager can handle the export/import for SAP Solution Manager, and you can reinstall Web Dispatcher on AWS.
 
    </details>
 
@@ -126,6 +138,11 @@
        <summary>Answer</summary>
 
        C.
+       - Option A: The heterogeneous system copy process and R3load may require a long time for a 15 TB database, and this could extend the migration window. This approach does not support incremental backups or changes, making it less ideal for the MOST quick migration.
+       - Option B: Backing up the Oracle database and transferring it via Direct Connect is a better option, especially with Data Guard for log replication. This minimizes the amount of data that needs to be transferred during the migration window, allowing a quicker switch-over. However, backups and restores of very large databases can be time-consuming.
+       - Option C: Using XTTS (Cross Platform Transportable Tablespace) could offer more efficiency in the migration process. The regular incremental backups and XTTS conversions reduce the amount of data to be transferred during the migration window. This should technically provide for a quicker switchover, albeit with a more complex setup.
+       - Option D: AWS SMS is generally used for migrating VMs, but it's not optimized for large database migrations, and taking regular snapshots could result in a lot of additional data transfer and storage costs.
+       Given that the primary concern is the "MOST quick" migration and the setup includes a 100 Gbps AWS Direct Connect connection, Option C is probably the best choice. This option minimizes the data that needs to be transferred during the critical migration window by employing incremental backups and XTTS conversions, thus enabling the most rapid switchover to the AWS system. It also ensures data integrity through the Oracle database backup process, making it a robust choice.
 
     </details>
 
@@ -284,7 +301,12 @@
     <details>
        <summary>Answer</summary>
 
-       BD.
+       BC.
+       - A. Deploy an Application Load Balancer. Configure the overlay IP address as a target. Application Load Balancers are primarily designed for HTTP/HTTPS traffic and are not well-suited for SAP GUI, which doesn't use these protocols.
+       - B. Deploy a Network Load Balancer. Configure the overlay IP address as a target. Network Load Balancers are capable of handling TCP traffic and are well-suited for use cases where low latency and high throughput are required, which fits the SAP GUI client tool requirements. Configuring the overlay IP address as a target would allow the NLB to distribute incoming SAP GUI traffic across multiple Availability Zones.
+       - C. Use an Amazon Route 53 private zone. Create an A record that has the overlay IP address as a target. Using Amazon Route 53 with a private zone would allow you to create DNS entries that resolve to private IP addresses within your VPC. This would enable access via the SAP GUI client tool through a more user-friendly DNS name rather than an IP address. You can create an A record with the overlay IP, making it possible to use already-existing private connectivity.
+       - D. Use AWS Transit Gateway. Configure the overlay IP address as a static route in the transit gateway route table. Specify the VPC as a target. AWS Transit Gateway is generally used for connecting multiple VPCs and on-premises networks. Adding a static route for the overlay IP does not specifically facilitate SAP GUI client access and would be more applicable for routing concerns between multiple networks.
+       - E. Use a NAT gateway. Configure the overlay IP address as a target. NAT Gateways are used to allow resources in a private subnet to initiate outbound traffic to the Internet or other AWS services, but they don't typically handle incoming traffic initiated from external clients, like the SAP GUI client tool, in the way required here.
 
     </details>
 
@@ -311,6 +333,10 @@
        <summary>Answer</summary>
 
        B.
+       - **AWS Application Migration Service (CloudEndure Migration):** This is designed for lift-and-shift migrations where the application architecture remains essentially the same. CloudEndure would not natively help you migrate from IBM Db2 to SAP HANA.
+       - **SAP Software Update Manager (SUM) Database Migration Option (DMO) with System Move:** This tool is designed specifically to handle complex SAP system migrations, including changing the database. SUM DMO can take care of upgrading SAP components and migrating the database at the same time.
+       - **AWS Server Migration Service (AWS SMS):** AWS SMS helps in automating the migration of existing VMware vSphere-based applications to AWS, but it doesn't inherently help with the database transformation from IBM Db2 to SAP HANA.
+       - **AWS Database Migration Service (AWS DMS):** While this service is useful for database migrations, it is not optimized for a specialized application like SAP and may not support a migration from IBM Db2 to SAP HANA.
 
     </details>
 
@@ -430,6 +456,11 @@
        <summary>Answer</summary>
 
        D.
+       - **AWS AppConfig and Systems Manager Automation:** AWS AppConfig is mostly used for application configuration. While Systems Manager can execute automation runbooks, this doesn't provide native compliance checks against AWS resources like EC2, S3, EBS, etc.
+       - **AWS Config managed rules:** These can monitor AWS resource configurations, but may not support all specific SAP requirements. However, you can create custom rules to cover gaps.
+       - **AWS Trusted Advisor:** This provides best practice checks but doesn't support custom checks and may not have all the necessary checks related to the specific requirements of SAP workloads.
+       - **AWS Config custom rules:** You can create custom rules in AWS Config to monitor specific requirements that aren't met by AWS Config managed rules. AWS Config can also provide detailed compliance monitoring for AWS resources.
+       - For notifications, Amazon EventBridge (formerly CloudWatch Events) and Amazon SNS can be used to send email notifications when a resource is flagged as non-compliant, satisfying the final requirement.
 
     </details>
 
@@ -442,6 +473,10 @@
        <summary>Answer</summary>
 
        C.
+       - Option A: All components are in the same Availability Zone, which makes it susceptible to a single point of failure if the whole Availability Zone experiences an issue. This doesn't fully meet high availability requirements.
+       - Option B: Similar to Option A, the components are in the same Availability Zone, and hence vulnerable to a single point of failure. Additionally, splitting them across two VPCs doesn't add any extra availability and may complicate network design and data flow.
+       - Option C: Components are spread across two Availability Zones, thereby reducing the risk associated with a single point of failure. All the components are within the same VPC which makes networking simpler and efficient. This meets the requirement for high availability.
+       - Option D: Although it deploys resources across two Availability Zones, it complicates the architecture by splitting components into two separate VPCs. This could complicate the network design, data transfer, and also doesn't offer additional high availability compared to Option C.
 
     </details>
 
@@ -476,6 +511,7 @@
        <summary>Answer</summary>
 
        B.
+       In the context of an overlay IP for high availability, the purpose is usually to redirect traffic to a secondary node in the case of a failure of the primary node. This typically involves updating or replacing a route to point to the secondary node's IP address. In AWS, this could be achieved by replacing the existing route in the route table, which is accomplished using the ec2:ReplaceRoute action.
 
     </details>
 
@@ -489,6 +525,7 @@
        <summary>Answer</summary>
 
        D.
+       Option D most closely aligns with the company’s need to not alter existing SAP HANA parameters while also offering a cost-effective solution tailored to each component. Using a smaller EC2 instance for the SAP HANA database can also offer cost savings. It makes use of specialized solutions for each part of the environment (database, application servers, file shares) and is therefore likely to be more cost-effective than a one-size-fits-all solution like CloudEndure for everything.
 
     </details>
 
@@ -514,7 +551,7 @@
     <details>
        <summary>Answer</summary>
 
-       A.
+       B.
 
     </details>
 
@@ -569,6 +606,7 @@
        <summary>Answer</summary>
 
        B.
+       This would be the most relevant option to consider. AWS Nitro System is the underlying platform for the newer EC2 instance types and offers enhanced security features. Enforcing IMDSv2 on Nitro-based instances is generally more straightforward and often recommended by AWS for additional security.
 
     </details>
 
@@ -609,6 +647,10 @@
        <summary>Answer</summary>
 
        D.
+       - A. Rebooting the instance might solve temporary issues, but it is not guaranteed to solve problems at the OS or instance configuration level. Also, rebooting would not initiate migration to another host by default.
+       - B. Requesting an instance limit increase would be relevant if you couldn't launch the instance in the first place due to quota limitations. Since the instance has already launched (but failed the status check), this doesn't seem to be the problem.
+       - C. Creating a ticket for AWS Support would be a course of action if you've ruled out other immediate solutions or if the issue seems to lie on the AWS infrastructure side. However, if the problem is with the source system (especially since this is a migration), AWS Support might not be able to resolve it immediately.
+       - D. If the test instance has failed an instance status check and is refusing network connections, there might be issues with the operating system, drivers, or other critical system settings. Given that you're migrating from SUSE Linux Enterprise Server 12 SP3 to AWS, ensuring that all required drivers and configurations are correctly installed on the source system is essential. Therefore, installing missing drivers, waiting for migration synchronization to complete, and then launching the test instance again seems like the most direct way to resolve this issue.
 
     </details>
 
@@ -727,6 +769,7 @@
        <summary>Answer</summary>
 
        C.
+       Set the SLIC_HW_VERSION Linux environment variable, assuming this environment variable is used to set a static hardware key for the SAP system.
 
     </details>
 
@@ -754,5 +797,8 @@
        <summary>Answer</summary>
 
        CDF.
+       - C. Enable detailed monitoring for Amazon CloudWatch on each Amazon EC2 instance where SAP workloads are running. Enabling Amazon CloudWatch will allow you to collect detailed performance metrics, which will be useful both for diagnosing the issue and for providing the necessary data to SAP support.
+       - D. Install, configure, and run the AWS Data Provider for SAP on each Amazon EC2 instance where SAP workloads are running. This tool is designed to provide additional metrics and diagnostics specific to SAP environments, making it easier to comply with SAP support requirements.
+       - F. Enable SAP enhanced monitoring through a SAPOSCOL enhanced function. SAPOSCOL is a platform-independent, stand-alone program that collects information about all running processes and operating system metrics like CPU, memory, and disk usage. This information is necessary for a comprehensive monitoring approach and can be crucial for debugging performance issues, as well as for providing the metrics that SAP support may require.
 
     </details>
