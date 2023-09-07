@@ -743,6 +743,11 @@
        <summary>Answer</summary>
 
        D.
+       - A. AWS Server Migration Service (AWS SMS) - This service is designed to automate, schedule, and track incremental replications of live server volumes, making it easier to coordinate large-scale server migrations. However, it generally moves the whole VM and not just the database, which may or may not meet the company's specific requirement of not installing any additional software on-premises.
+       - B. AWS Application Migration Service (CloudEndure Migration) - This service also typically requires the installation of an agent on the source servers, which may not meet the compliance requirements of not installing additional software on the existing on-premises database servers.
+       - C. SAP Software Update Manager (SUM) Database Migration Option (DMO) with System Move - This option allows you to update your SAP system and migrate your database in one procedure. However, it generally requires additional software components and preparatory steps which might violate the compliance requirements.
+       - D. Oracle Database replication with Oracle Data Guard - Oracle Data Guard ensures high availability, data protection, and disaster recovery for Oracle databases. Given the constraints of not being able to install any additional software on the on-premises database servers, using Oracle's built-in Data Guard feature could be a good fit, assuming it's already part of the existing Oracle Database setup. Data Guard would allow for a seamless migration of the Oracle Database to a new Oracle Database instance on AWS.
+       Based on the constraint that no additional software can be installed on the on-premises database servers and the requirement to continue using Oracle Database, option D, Oracle Database replication with Oracle Data Guard, would seem to be the most appropriate choice. It allows for a database-centric migration approach while adhering to the compliance requirements.
 
     </details>
 

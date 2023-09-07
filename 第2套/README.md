@@ -1,4 +1,4 @@
-# AWS MLS 1-65
+# AWS PAS 1-65
 
 1. A company is migrating its SAP S/4HANA landscape from on premises to AWS. An SAP solutions architect is designing a backup solution for the SAP S/4HANA landscape on AWS. The backup solution will use AWS Backint Agent for SAP HANA (AWS Backint agent) to store backups in Amazon S3. The company's backup policy for source systems requires a retention period of 150 days for weekly full online backups. The backup policy requires a retention period of 30 days for daily transaction log backups. The company must keep the same backup policy on AWS while maximizing data resiliency. The company needs the ability to retrieve the backup data one or two times each year within 10 hours of the retrieval request. The SAP solutions architect must configure AWS Backint agent and S3 Lifecycle rules according to these parameters. Which solution will meet these requirements MOST cost-effectively?
    - [ ] A. Configure the target S3 bucket to use S3 Glacier Deep Archive for the backup files. Create S3 Lifecycle rules on the S3 bucket to delete full online backup files that are older than 150 days and to delete log backup files that are older than 30 days.
@@ -331,7 +331,8 @@ Which solution will meet these requirements with the LEAST custom development ef
     <details>
        <summary>Answer</summary>
 
-       C.
+       D.
+       VPC Endpoint Service + IAM Role: This is the most restrictive and secure approach. The VPC endpoint service allows you to expose a specific service (in this case, the NLB for SAP) to another VPC. By using IAM roles attached to the ETL instances, you can very tightly control which instances can access the SAP system. This would provide the most granular level of access control and thus the most protection against potential misuse of the ODP extractor services.
 
     </details>
 
@@ -633,6 +634,11 @@ Which solution will meet these requirements with the LEAST custom development ef
        <summary>Answer</summary>
 
        C.
+       - A. This option involves making REST-based calls to Amazon CloudWatch and Amazon EC2. However, this could traverse the public internet unless specific security measures are put in place. It does not fully meet the requirement for maximum security.
+       - B. Allowing access to Amazon CloudWatch and EC2 endpoints through a NAT gateway does not satisfy the requirement to keep data off the public internet. NAT gateway still involves routing the traffic over the public internet, even though it is doing so from within the AWS network.
+       - C. This option is the most aligned with the requirements. By installing the AWS Data Provider for SAP and creating VPC endpoints for Amazon CloudWatch and Amazon EC2, you can ensure that the data does not traverse the public internet. VPC endpoints allow resources in your VPC to communicate with AWS services directly, bypassing the public internet. This maximizes security and meets the constraints. The IAM policy is also appropriately scoped to only the necessary actions.
+       - D. Similar to option C, this provides the required VPC endpoints, but the IAM policy is too permissive ("allows all actions for all EC2 resources"). This doesn't align with the principle of least privilege, which is a key part of maximizing security.
+       Therefore, option C appears to be the best choice to meet the company's requirements for a secure, supported integration between AWS and its SAP system.
 
     </details>
 
